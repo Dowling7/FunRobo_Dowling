@@ -1,11 +1,9 @@
 % Get a LIDAR Scan
-% Returns a range vector of 682 elements after a Lidar Scan from min step
-% to max step.
-% Range Values correspond from -120 to +120 degrees.
-% Author- Shikhar Shrestha, IIT Bhubaneswar
-% Lightly modified by Olin Studnet 2019
+% Returns array of LIDAR X and Y data adjusted w/ angle data
+% Author - Shikhar Shrestha, IIT Bhubaneswar
+% Modified by Eliyahu Suskind, Olin 2024
 
-function [rangescan]=FunRoboLidarScan(lidar)
+function [x_data,y_data]=FunRoboLidarScan(lidar)
 proceed=0;
 fprintf(lidar,'GD0044072500');
 while (proceed==0)
@@ -36,8 +34,11 @@ for k=1:size(encodeddist,1)
     rangescan(k)=decodeSCIP(encodeddist(k,:));
 end
 
-
+angles = (-120:240/682:120-240/682)*pi/180;
+x_data = rangescan .* cos(angles);
+y_data = rangescan .* sin(angles);
 
 
 
 end
+
